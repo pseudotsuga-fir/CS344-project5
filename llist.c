@@ -25,7 +25,7 @@ void llist_print(struct node *head) {
 		printf("%d", head->value);
 		head = head->next;
 		while(head) {
-			printf("-> %d", head->value);
+			printf(" -> %d", head->value);
 			head = head->next;
 		}
 		printf("\n");
