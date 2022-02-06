@@ -52,21 +52,59 @@ void llist_insert_tail(struct node **head, struct node *n) {
 	}
 }
 
+struct node *llist_delete_head(struct node **head) {
+	if(!*head) {
+		return NULL;
+	}
+	struct node *tmp = *head;
+	*head = tmp->next;
+	return tmp;
+}
+
+void llist_free(struct node **head) {
+	if(!*head) {
+		return;
+	}
+	
+	struct node *tmp = *head;
+	struct node *next = tmp->next;    
+    
+	while(next) {
+		tmp = next;
+		next = tmp->next;
+		free(tmp);
+	}
+	*head = NULL;
+}
+
 int main(int argc, char** argv) {
 	struct node *head = NULL;
-//	for(int i=1; i < argc; i++) {
-//		if(strncmp(argv[i], "i", 1) == 0) {
-//
-//		}
-//	}
-	struct node *n = node_alloc(56);
-	struct node *n2 = node_alloc(2);
-	struct node *n3 = node_alloc(68);
-	struct node *n4 = node_alloc(18);
-	llist_insert_tail(&head, n);
-	llist_insert_tail(&head, n2);
-	llist_insert_tail(&head, n3);
-	llist_insert_head(&head, n4);
-	llist_print(head);
-
+	for(int i=1; i < argc; i++) {
+		if(strncmp(argv[i], "i", 1) == 0) {
+			int value = atoi(argv[i + 1]);
+			if(strcmp(argv[i], "ih") == 0) {
+				struct node *n = node_alloc(value);
+				llist_insert_head(&head, n);
+			}
+			else if(strcmp(argv[i], "it") == 0) {
+				struct node *n = node_alloc(value);
+				llist_insert_tail(&head, n);
+			}
+			i++;
+			continue;
+		}
+		else if(strcmp(argv[i], "dh") == 0) {
+			llist_delete_head(&head);
+		}
+		else if(strcmp(argv[i], "f") == 0) {
+			llist_free(&head);
+		}
+		else if(strcmp(argv[i], "p") == 0) {
+			llist_print(head);
+		}
+		else {
+			printf("Unrecognized command: %s\n", argv[i]);
+			printf("Usage: ./llist [ih INT | it INT | dh | f | p]\n");
+		}
+	}
 }
